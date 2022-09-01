@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    h1= title
+
+    ul
+        for value in bookinstance_list
+            li
+                a(href=value.url) #{value.book.title} : #{value.imprint}
+                if value.status == 'Available'
+                    span.text-success  #{value.status}
+                else if value.status == 'Maintenance'
+                    span.text-danger  #{value.status}
+                else
+                    span.text-warning  #{value.status}
+                if value.status != 'Available'
+                    span  (Due: #{value.due_back_formatted})
+        else
+            li There are no book copies in this library.

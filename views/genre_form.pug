@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h1 #{title}
+
+    // Because the action is an empty string, the data will be sent to the same page as a POST request
+    form(method='POST', action='')
+        div.form-group
+            label(for='name') Genre:
+            input#name.form-control(type='text', placeholder='Fantasy, Poetry, etc.', name='name', value=(undefined===genre ? '' : genre.name))
+        button.btn.btn-primary(type='submit') Submit
+    
+    hr
+    
+    if errors
+        url
+            for error in errors
+                li!= error.msg
