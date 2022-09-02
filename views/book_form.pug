@@ -9,7 +9,7 @@ block content
             input#title.form-control(
                 type='text'
                 name='title'
-                value=(book===undefined ? '' : book.title)
+                value!=(book===undefined ? '' : book.title)
             )
             label(for='author') Author: 
             select#author.form-control(
@@ -29,7 +29,7 @@ block content
                     if book
                         option(
                             value=author._id
-                            selected=(author._id.toString() === book.author._id.toString() ? 'selected' : false)
+                            selected= (author._id.toString() == book.author._id || author._id.toString() == book.author) ? 'selected' : false
                         ) #{author.name}
                     else
                         option(value=author._id) #{author.name}

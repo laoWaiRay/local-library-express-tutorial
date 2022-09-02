@@ -60,4 +60,22 @@ AuthorSchema
         return `/catalog/author/${this._id}`;
     });
 
+// Virtuals for date inputs formatted to yyyy-mm-dd using luxon
+AuthorSchema
+    .virtual('dob_input_format')
+    // No arrow function because we need the this object
+    .get(function() {
+        return DateTime.fromJSDate(this.date_of_birth).toFormat('yyyy-LL-dd')
+    });
+
+AuthorSchema
+    .virtual('dod_input_format')
+    // No arrow function because we need the this object
+    .get(function() {
+        return DateTime.fromJSDate(this.date_of_death).toFormat('yyyy-LL-dd')
+    });
+
+
+    
+
 module.exports = mongoose.model('Author', AuthorSchema);

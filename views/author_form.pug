@@ -26,12 +26,17 @@ block content
             input#date_of_birth.form-control(
                 type='date'
                 name='date_of_birth'
-                value=(undefined===author ? '' : author.date_of_birth)
+                value=(undefined===author ? '' : author.dob_input_format)
             )
             label(for='date_of_death') Date of death: 
             input#date_of_death.form-control(
                 type='date'
                 name='date_of_death'
-                value=(undefined===author ? '' : author.date_of_death)
+                value=(undefined===author ? '' : author.dod_input_format)
             )
         button.btn.btn-primary Submit
+
+        if errors
+            ul
+                for error in errors
+                    li= error.msg

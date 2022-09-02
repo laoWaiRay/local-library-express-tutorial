@@ -22,10 +22,9 @@ block content
     div.form-group
       label(for='status') Status:
       select#status.form-control(type='select' placeholder='Select status' name='status' required='true')
-        option(value='Maintenance') Maintenance
-        option(value='Available') Available
-        option(value='Loaned') Loaned
-        option(value='Reserved') Reserved
+        - const statuses = ['Maintenance', 'Available', 'Loaned', 'Reserved']
+        for status in statuses
+            option(value=status, selected=typeof bookinstance === 'undefined' ? false : bookinstance.status === status ? 'selected' : false)= status
 
     button.btn.btn-primary(type='submit') Submit
 

@@ -150,11 +150,60 @@ exports.author_delete_post = (req, res, next) => {
 };
 
 // Display author update form on GET
-exports.author_update_get = (req, res) => {
-    res.send('NOT IMPLEMENTED: Author update GET');
+exports.author_update_get = (req, res, next) => {
+    Author.findById(req.params.id, (err, author) => {
+        if (err) { return next(err) };
+        res.render('author_form', {
+            title: 'Update Author',
+            author
+        })
+    })
 };
 
 // Handle Author update on POST
-exports.author_update_post = (req, res) => {
-    res.send('NOT IMPLEMENTED: Author update POST');
-};
+exports.author_update_post = [
+    body('first_name')
+        .trim()
+        .isLength({ min:1 })
+        .withMessage()
+        .escape(),
+    body('family_name')
+        .trim()
+        .isLength({ min:1 })
+        .withMessage()
+        .escape(),
+    body('date_of_birth')
+        .optional({ checkFalsy: true })
+        .isISO8601()
+        .toDate(),
+    body('date_of_death')
+        .optional({ checkFalsy: true })
+        .isISO8601()
+        .toDate(),
+    (req, res, next) => {
+        const errors = validationResult(req);
+
+        const author = new Author({
+            first_name: req.body.first_name,
+            family_name: req.body.family_name,
+            date_of_birth: req.body.date_of_birth,
+            date_of_death: req.body.date_of_death,
+            _id: req.params.id
+        });
+
+        if (!errors.isEmpty()) {
+            console.dir(errors)
+            res.render('author_form', {
+               title: 'Update Author',
+               author,
+               errors: errors.array() 
+            })
+            return;
+        }
+
+        Author.findByIdAndUpdate(req.params.id, author, (err, updatedAuthor) => {
+            if (err) { return next(err) };
+            res.redirect(updatedAuthor.url);
+        })
+    }
+]
